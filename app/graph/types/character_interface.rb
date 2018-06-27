@@ -5,12 +5,13 @@
 #   appearsIn: [Episode]
 # }
 module Types
-  CharacterInterface = GraphQL::InterfaceType.define do
-    name "Character"
+  module CharacterInterface
+    include Types::BaseInterface
+    graphql_name "Character"
     description "A sentient actor in Star Wars"
-    field :id,            !types.ID, "The unique ID of this person"
-    field :name,          !types.String, "The name of this person"
-    connection :friends, CharacterInterface.connection_type, "Friends of this person"
-    field :appearsIn,     types[EpisodeEnum], "Episodes this person appears in", property: :appears_in_names
+    field :id, ID, "The unique ID of this person", null: false
+    field :name, String, "The name of this person", null: false
+    field :friends, CharacterInterface.connection_type, "Friends of this person", null: true, connection: true
+    field :appears_in, [EpisodeEnum, null: true], "Episodes this person appears in", method: :appears_in_names, null: true
   end
 end

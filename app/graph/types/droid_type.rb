@@ -6,15 +6,15 @@
 #   primaryFunction: String
 # }
 module Types
-  DroidType = GraphQL::ObjectType.define do
-    name "Droid"
+  class DroidType < Types::BaseObject
     description "A robotic character in Star Wars"
-    interfaces [GraphQL::Relay::Node.interface, CharacterInterface]
+    implements GraphQL::Relay::Node.interface
+    implements CharacterInterface
 
     global_id_field :id
-    field :name, !types.String, "The name of this droid"
-    connection :friends, CharacterInterface.connection_type, "Friends of this droid"
-    field :appearsIn, types[EpisodeEnum], "Episodes this droid appears in", property: :appears_in
-    field :primaryFunction,  types.String, "What this droid is for", property: :primary_function
+    field :name, String, "The name of this droid", null: false
+    field :friends, CharacterInterface.connection_type, "Friends of this droid", null: true, connection: true
+    field :appears_in, [EpisodeEnum, null: true], "Episodes this droid appears in", null: true
+    field :primary_function, String, "What this droid is for", null: true
   end
 end
